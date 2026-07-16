@@ -19,7 +19,7 @@ class AttendanceNotifier extends Notifier<AttendanceState> {
 
     state = state.copyWith(state: ResultState.loading);
 
-    final useCase = ref.watch(fetchAttendanceUseCaseProvider);
+    final useCase = ref.read(fetchAttendanceUseCaseProvider);
     final result = await useCase.execute(harcodedUserId);
 
     switch (result) {

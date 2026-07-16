@@ -20,7 +20,9 @@ class _AttendanceHistoryScreenState
   void initState() {
     super.initState();
 
-    ref.read(attendanceNotifierProvider.notifier).fetchAttendance();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      ref.read(attendanceNotifierProvider.notifier).fetchAttendance();
+    });
   }
 
   @override
@@ -37,7 +39,7 @@ class _AttendanceHistoryScreenState
     switch (attendanceState.state) {
       case ResultState.loading:
         return Center(child: CircularProgressIndicator());
-      
+
       case ResultState.success:
         return ListView.builder(
           itemCount: attendanceState.attendanceList.length,
