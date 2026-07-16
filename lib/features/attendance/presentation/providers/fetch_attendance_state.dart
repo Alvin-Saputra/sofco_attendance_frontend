@@ -1,24 +1,25 @@
 import 'package:attendance_frontend/features/attendance/domain/entities/attendance.dart';
+import 'package:attendance_frontend/features/attendance/presentation/providers/result_state.dart';
 
-enum ResultState { initial, loading, success, empty, error }
 
-class AttendanceState {
+
+class FetchAttendanceState {
   final ResultState state;
   final String message;
   final List<Attendance> attendanceList;
 
-  AttendanceState({
+  FetchAttendanceState({
     this.state = ResultState.initial,
     this.message = '',
     this.attendanceList = const [],
   });
 
-  AttendanceState copyWith({
+  FetchAttendanceState copyWith({
     ResultState? state,
     String? message,
     List<Attendance>? attendanceList,
   }) {
-    return AttendanceState(
+    return FetchAttendanceState(
       state: state ?? this.state,
       message: message ?? this.message,
       attendanceList: attendanceList ?? this.attendanceList,

@@ -1,4 +1,6 @@
 import 'package:attendance_frontend/features/attendance/presentation/screens/attendance_history_screen.dart';
+import 'package:attendance_frontend/features/attendance/presentation/screens/home_screen.dart';
+import 'package:attendance_frontend/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -14,13 +16,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
-      
-        colorScheme: .fromSeed(seedColor: Colors.deepPurple),
-      ),
-      home: AttendanceHistoryScreen(),
+      theme: ThemeData(colorScheme: .fromSeed(seedColor: Colors.deepPurple)),
+      initialRoute: AppRoutes.home,
+      routes: AppRoutes.routes,
     );
   }
 }
-
-

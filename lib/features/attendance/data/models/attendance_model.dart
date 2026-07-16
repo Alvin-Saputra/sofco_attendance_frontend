@@ -10,6 +10,7 @@ class AttendanceModel extends Attendance {
     required super.userId,
     required super.date,
     required super.time,
+    required super.photoUrl
   });
 
   factory AttendanceModel.fromJson(Map<String, dynamic> json) {
@@ -17,7 +18,8 @@ class AttendanceModel extends Attendance {
       id: json['id'],
       userId: json['user_id'],
       date: DateParser.fromString(json['attendance_date'] as String),
-      time: TimeParser.fromString(json['attendance_time'] as String),
+      time: TimeParser.fromString(json['attendance_time'] as String), 
+      photoUrl: json['photo_url'],
     );
   }
 }

@@ -38,6 +38,7 @@ dependencies:
   intl: ^0.20.3
   http: ^1.6.0
   riverpod_annotation: ^4.0.3
+  image_picker: ^1.2.3
 
 dev_dependencies:
   flutter_test:

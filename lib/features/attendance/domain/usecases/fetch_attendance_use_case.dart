@@ -7,7 +7,7 @@ class FetchAttendanceUseCase {
 
   FetchAttendanceUseCase(this.repository);
 
-  Future<ApiResult<FetchAttendanceResponse>> execute(userId){
+  Future<ApiResult<FetchAttendanceResponse>> execute(int userId){
     return repository.fetchAttendance(userId);
   }
 }

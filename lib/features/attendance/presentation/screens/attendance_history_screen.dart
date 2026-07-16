@@ -1,7 +1,9 @@
+import 'package:attendance_frontend/core/components/attendance_card.dart';
 import 'package:attendance_frontend/core/utils/date_parser.dart';
 import 'package:attendance_frontend/core/utils/time_parser.dart';
-import 'package:attendance_frontend/features/attendance/presentation/providers/attendance_notifier.dart';
-import 'package:attendance_frontend/features/attendance/presentation/providers/attendance_state.dart';
+import 'package:attendance_frontend/features/attendance/presentation/providers/fetch_attendance_notifier.dart';
+import 'package:attendance_frontend/features/attendance/presentation/providers/fetch_attendance_state.dart';
+import 'package:attendance_frontend/features/attendance/presentation/providers/result_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -21,13 +23,13 @@ class _AttendanceHistoryScreenState
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(attendanceNotifierProvider.notifier).fetchAttendance();
+      ref.read(fetchAttendanceNotifierProvider.notifier).fetchAttendance();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    final attendanceState = ref.watch(attendanceNotifierProvider);
+    final attendanceState = ref.watch(fetchAttendanceNotifierProvider);
 
     return Scaffold(
       appBar: AppBar(title: const Text("Attendance History")),
@@ -35,7 +37,7 @@ class _AttendanceHistoryScreenState
     );
   }
 
-  Widget _buildBodyContent(AttendanceState attendanceState) {
+  Widget _buildBodyContent(FetchAttendanceState attendanceState) {
     switch (attendanceState.state) {
       case ResultState.loading:
         return Center(child: CircularProgressIndicator());
@@ -44,18 +46,12 @@ class _AttendanceHistoryScreenState
         return ListView.builder(
           itemCount: attendanceState.attendanceList.length,
           itemBuilder: (context, index) {
-            return Card(
-              margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-              child: ListTile(
-                leading: CircleAvatar(child: Icon(Icons.av_timer_sharp)),
-                title: Text(
-                  DateParser.dateTimeToString(
-                    attendanceState.attendanceList[index].date,
-                  ),
-                ),
-                subtitle: Text(
-                  "Time: ${TimeParser.timeOfDaytoString(attendanceState.attendanceList[index].time)}",
-                ),
+            return AttendanceCard(
+              title: DateParser.dateTimeToString(
+                attendanceState.attendanceList[index].date,
+              ),
+              subtitle: TimeParser.timeOfDaytoString(
+                attendanceState.attendanceList[index].time,
               ),
             );
           },
@@ -73,7 +69,7 @@ class _AttendanceHistoryScreenState
               ElevatedButton(
                 onPressed: () {
                   ref
-                      .read(attendanceNotifierProvider.notifier)
+                      .read(fetchAttendanceNotifierProvider.notifier)
                       .fetchAttendance();
                 },
                 child: Text("Retry"),
