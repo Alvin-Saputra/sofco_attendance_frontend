@@ -1,3 +1,7 @@
+
+
+import 'package:attendance_frontend/core/utils/date_parser.dart';
+import 'package:attendance_frontend/core/utils/time_parser.dart';
 import 'package:attendance_frontend/features/attendance/domain/entities/attendance.dart';
 
 class AttendanceModel extends Attendance {
@@ -12,8 +16,8 @@ class AttendanceModel extends Attendance {
     return AttendanceModel(
       id: json['id'],
       userId: json['user_id'],
-      date: json['date'],
-      time: json['time'],
+      date: DateParser.fromString(json['attendance_date'] as String),
+      time: TimeParser.fromString(json['attendance_time'] as String),
     );
   }
 }

@@ -5,7 +5,7 @@ import 'dart:io';
 import 'package:attendance_frontend/features/attendance/data/models/fetch_attendance_response.dart';
 import 'package:http/http.dart' as http;
 class AttendanceDatasources {
-  static const String _baseUrl = 'http://10.0.2.2:3000';
+  static const String _baseUrl = 'http://localhost:3000';
 
   Future<FetchAttendanceResponse> fetchAttendance(int userId) async{
     
