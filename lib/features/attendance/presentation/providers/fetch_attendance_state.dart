@@ -2,7 +2,6 @@ import 'package:attendance_frontend/features/attendance/domain/entities/attendan
 import 'package:attendance_frontend/features/attendance/presentation/providers/result_state.dart';
 
 
-
 class FetchAttendanceState {
   final ResultState state;
   final String message;
