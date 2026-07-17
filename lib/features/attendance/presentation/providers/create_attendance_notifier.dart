@@ -28,7 +28,6 @@ class CreateAttendanceNotifier extends Notifier<CreateAttendanceState> {
 
     final useCase = ref.read(createAttendanceUseCaseProvider);
     final result = await useCase.execute(
-      userId: harcodedUserId,
       date: date,
       time: time,
       image: image,

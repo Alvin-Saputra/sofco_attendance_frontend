@@ -10,13 +10,11 @@ class CreateAttendanceUseCase {
   CreateAttendanceUseCase(this.repository);
 
   Future<ApiResult<CreateAttendanceResponse>> execute({
-    required int userId,
     required String date,
     required String time,
     required File image,
   }) {
     return repository.createAttendance(
-      userId: userId,
       date: date,
       time: time,
       image: image,

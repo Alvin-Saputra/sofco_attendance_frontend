@@ -1,28 +1,31 @@
 import 'package:attendance_frontend/core/components/attendance_card.dart';
 import 'package:attendance_frontend/core/components/button.dart';
+import 'package:attendance_frontend/features/auth/presentation/provider/auth_notifier.dart';
 import 'package:attendance_frontend/routes/app_routes.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends ConsumerState<HomeScreen> {
   @override
   Widget build(BuildContext context) {
+    final authState = ref.watch(authNotifierProvider);
     return Scaffold(
       appBar: AppBar(
-        title: const Column(
+        title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("Hello", style: TextStyle(fontSize: 14, color: Colors.grey)),
+            const Text("Hello", style: TextStyle(fontSize: 14, color: Colors.grey)),
 
             Text(
-              "Alvin Saputra",
-              style: TextStyle(
+              "${authState.user?.username}",
+              style: const TextStyle(
                 fontSize: 18,
                 color: Colors.black87,
                 fontWeight: FontWeight.bold,
@@ -30,6 +33,46 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ],
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout_rounded, color: Colors.redAccent),
+            tooltip: 'Logout',
+            onPressed: () async {
+              
+              final confirmLogout = await showDialog<bool>(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: const Text('Konfirmasi'),
+                  content: const Text('Apakah Anda yakin ingin keluar dari aplikasi?'),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context, false),
+                      child: const Text('Batal'),
+                    ),
+                    TextButton(
+                      onPressed: () => Navigator.pop(context, true),
+                      child: const Text('Keluar', style: TextStyle(color: Colors.red)),
+                    ),
+                  ],
+                ),
+              );
+              if (confirmLogout == true) {
+               
+                await ref.read(authNotifierProvider.notifier).logout();
+                
+               
+                if (context.mounted) {
+                  Navigator.pushNamedAndRemoveUntil(
+                    context,
+                    AppRoutes.login,
+                    (route) => false, 
+                  );
+                }
+              }
+            },
+          ),
+          const SizedBox(width: 8), 
+        ],
       ),
       body: SafeArea(
         child: SingleChildScrollView(

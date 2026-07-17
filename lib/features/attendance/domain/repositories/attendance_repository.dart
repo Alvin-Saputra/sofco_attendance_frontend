@@ -5,9 +5,8 @@ import 'package:attendance_frontend/features/attendance/data/models/create_atten
 import 'package:attendance_frontend/features/attendance/data/models/fetch_attendance_response.dart';
 
 abstract class AttendanceRepository {
-  Future<ApiResult<FetchAttendanceResponse>> fetchAttendance(int userId);
+  Future<ApiResult<FetchAttendanceResponse>> fetchAttendance();
   Future<ApiResult<CreateAttendanceResponse>> createAttendance({
-    required int userId,
     required String date,
     required String time,
     required File image,

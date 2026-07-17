@@ -16,12 +16,12 @@ class FetchAttendanceNotifier extends Notifier<FetchAttendanceState> {
   }
 
   Future<void> fetchAttendance() async {
-    const harcodedUserId = 3;
+    
 
     state = state.copyWith(state: ResultState.loading);
 
     final useCase = ref.read(fetchAttendanceUseCaseProvider);
-    final result = await useCase.execute(harcodedUserId);
+    final result = await useCase.execute();
 
     switch (result) {
       case Success():

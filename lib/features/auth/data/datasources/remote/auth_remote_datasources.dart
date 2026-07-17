@@ -4,7 +4,7 @@ import 'dart:io';
 import 'package:attendance_frontend/features/auth/data/models/login_response.dart';
 import 'package:http/http.dart' as http;
 
-class AuthDatasources {
+class AuthRemoteDatasources {
   static const String _baseUrl = 'http://10.0.2.2:3000';
 
   Future<LoginResponse> login(String username, String password) async {

@@ -9,13 +9,19 @@ import 'package:http/http.dart' as http;
 class AttendanceDatasources {
   static const String _baseUrl = 'http://10.0.2.2:3000';
 
-  Future<FetchAttendanceResponse> fetchAttendance(int userId) async {
+  Future<FetchAttendanceResponse> fetchAttendance(
+    int userId,
+    String token,
+  ) async {
     final url = Uri.parse('$_baseUrl/attendance?userId=$userId');
 
     try {
       final response = await http.get(
         url,
-        headers: {'Accept': 'application/json'},
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
       );
 
       if (response.statusCode == 200) {
@@ -45,6 +51,7 @@ class AttendanceDatasources {
 
   Future<CreateAttendanceResponse> createAttendance({
     required int userId,
+    required String token,
     required String date,
     required String time,
     required File image,
@@ -52,7 +59,10 @@ class AttendanceDatasources {
     final url = Uri.parse('$_baseUrl/attendance');
     var request = http.MultipartRequest('POST', url);
 
-    request.headers.addAll({'Accept': 'application/json'});
+    request.headers.addAll({
+      'Accept': 'application/json',
+      'Authorization': 'Bearer $token',
+    });
 
     try {
       request.fields['userId'] = userId.toString();
