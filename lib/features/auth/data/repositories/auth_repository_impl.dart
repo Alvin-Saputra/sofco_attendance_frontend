@@ -82,9 +82,9 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<void> saveUsername(String username) async {
+  Future<void> saveUsername(String userName) async {
     try {
-      await authLocalDatasource.saveToken(username);
+      await authLocalDatasource.saveUserName(userName);
     } catch (e) {
       rethrow;
     }

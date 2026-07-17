@@ -4,6 +4,7 @@ import 'package:attendance_frontend/core/utils/time_parser.dart';
 import 'package:attendance_frontend/features/attendance/presentation/providers/fetch_attendance_notifier.dart';
 import 'package:attendance_frontend/features/attendance/presentation/providers/fetch_attendance_state.dart';
 import 'package:attendance_frontend/features/attendance/presentation/providers/result_state.dart';
+import 'package:attendance_frontend/features/attendance/presentation/screens/attendance_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -47,12 +48,23 @@ class _AttendanceHistoryScreenState
           itemCount: attendanceState.attendanceList.length,
           itemBuilder: (context, index) {
             return AttendanceCard(
-              title: DateParser.dateTimeToString(
+              title: DateParser.dateToString(
                 attendanceState.attendanceList[index].date,
+                pattern: 'dd MMM yyyy',
               ),
               subtitle: TimeParser.timeOfDaytoString(
                 attendanceState.attendanceList[index].time,
               ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AttendanceDetailScreen(
+                      attendanceItem: attendanceState.attendanceList[index],
+                    ),
+                  ),
+                );
+              },
             );
           },
         );

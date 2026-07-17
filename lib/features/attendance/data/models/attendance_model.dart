@@ -17,7 +17,7 @@ class AttendanceModel extends Attendance {
     return AttendanceModel(
       id: json['id'],
       userId: json['user_id'],
-      date: DateParser.fromString(json['attendance_date'] as String),
+      date: DateParser.stringToDate(json['attendance_date'] as String, pattern: 'yyyy-MM-dd'),
       time: TimeParser.fromString(json['attendance_time'] as String), 
       photoUrl: json['photo'],
     );

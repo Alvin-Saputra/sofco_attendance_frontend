@@ -29,6 +29,7 @@ class MyApp extends ConsumerWidget {
       title: 'Flutter Demo',
       theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple)),
       routes: AppRoutes.routes, // Daftarkan rute aplikasi kamu di sini
+      debugShowCheckedModeBanner: false,
       
       // Jadikan properti 'home' dinamis berdasarkan status loading data
       home: initialRouteAsync.when(

@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 
 class AttendanceCard extends StatelessWidget {
-  const AttendanceCard({super.key, required this.title, required this.subtitle});
+  const AttendanceCard({super.key, required this.title, required this.subtitle, required this.onPressed});
 
   final String title;
   final String subtitle;
+  final Function() onPressed;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: (){},
+      onTap: onPressed,
       child: Card(
         elevation: 0,
         margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
