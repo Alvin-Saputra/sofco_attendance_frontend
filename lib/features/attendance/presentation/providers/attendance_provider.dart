@@ -1,5 +1,6 @@
 import 'package:attendance_frontend/core/utils/shared_prefs_provider.dart';
 import 'package:attendance_frontend/features/attendance/data/models/create_attendance_response.dart';
+import 'package:attendance_frontend/features/attendance/domain/usecases/check_attendance_use_case.dart';
 import 'package:attendance_frontend/features/attendance/domain/usecases/create_attendance_use_case.dart';
 import 'package:attendance_frontend/features/auth/data/datasources/local/auth_local_datasources.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -29,6 +30,11 @@ final attendanceRepositoryProvider = Provider<AttendanceRepository>((ref) {
 final fetchAttendanceUseCaseProvider = Provider<FetchAttendanceUseCase>((ref) {
   final repository = ref.watch(attendanceRepositoryProvider);
   return FetchAttendanceUseCase(repository);
+});
+
+final checkAttendanceUseCaseProvider = Provider<CheckAttendanceUseCase>((ref) {
+  final repository = ref.watch(attendanceRepositoryProvider);
+  return CheckAttendanceUseCase(repository);
 });
 
 final createAttendanceUseCaseProvider = Provider<CreateAttendanceUseCase>((ref) {

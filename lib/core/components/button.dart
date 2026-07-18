@@ -1,17 +1,18 @@
 import 'package:flutter/material.dart';
 
 class Button extends StatelessWidget {
-  const Button({super.key, required this.onPressed, required this.text});
+  const Button({super.key, required this.onPressed, required this.text, this.isDisable = false});
 
   final Function() onPressed;
   final String text;
+  final bool isDisable;
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: onPressed,
+      onPressed: (isDisable)?null:onPressed,
       style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.blue,
+        backgroundColor: (isDisable)?Colors.grey:Colors.blue,
         foregroundColor: Colors.white,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(

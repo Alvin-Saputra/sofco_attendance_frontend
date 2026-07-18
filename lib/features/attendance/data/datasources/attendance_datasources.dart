@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:attendance_frontend/core/error/exception.dart';
 import 'package:attendance_frontend/core/utils/date_parser.dart';
+import 'package:attendance_frontend/features/attendance/data/models/check_attendance_response.dart';
 import 'package:attendance_frontend/features/attendance/data/models/create_attendance_response.dart';
 import 'package:attendance_frontend/features/attendance/data/models/fetch_attendance_response.dart';
 import 'package:http/http.dart' as http;
@@ -28,6 +29,38 @@ class AttendanceDatasources {
       if (response.statusCode == 200) {
         final Map<String, dynamic> decodedJson = json.decode(response.body);
         return FetchAttendanceResponse.fromJson(decodedJson);
+      } else {
+        throw ServerException(response.statusCode, response.body);
+      }
+    } on SocketException {
+      throw NetworkException();
+    } on TimeoutException {
+      throw TimeoutCustomException();
+    } catch (e, stackTrace) {
+      print("Error Dari datasource: $e");
+      print("Titik Lokasi (Stack Trace):\n$stackTrace" );
+      rethrow;
+    }
+  }
+  Future<CheckAttendanceResponse> checkAttendance(
+    int userId,
+    String token,
+    String date
+  ) async {
+    final url = Uri.parse('$_baseUrl/attendance/check?userId=$userId&date=$date');
+
+    try {
+      final response = await http.get(
+        url,
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> decodedJson = json.decode(response.body);
+        return CheckAttendanceResponse.fromJson(decodedJson);
       } else {
         throw ServerException(response.statusCode, response.body);
       }

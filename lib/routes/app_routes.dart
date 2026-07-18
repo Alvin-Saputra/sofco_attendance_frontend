@@ -1,5 +1,5 @@
 
-import 'package:attendance_frontend/features/attendance/presentation/screens/Success_screen.dart';
+import 'package:attendance_frontend/features/attendance/presentation/screens/success_screen.dart';
 import 'package:attendance_frontend/features/attendance/presentation/screens/attendance_history_screen.dart';
 import 'package:attendance_frontend/features/attendance/presentation/screens/attendance_create_screen.dart';
 import 'package:attendance_frontend/features/attendance/presentation/screens/home_screen.dart';
