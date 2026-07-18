@@ -1,5 +1,7 @@
 import 'package:attendance_frontend/core/utils/shared_prefs_provider.dart';
+import 'package:attendance_frontend/features/auth/presentation/provider/auth_notifier.dart';
 import 'package:attendance_frontend/features/auth/presentation/provider/auth_provider.dart';
+import 'package:attendance_frontend/features/auth/presentation/provider/auth_state.dart';
 import 'package:attendance_frontend/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -22,8 +24,9 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // Memantau status penentuan rute awal secara reaktif
-    final initialRouteAsync = ref.watch(initialRouteProvider);
+    
+    // final initialRouteAsync = ref.watch(initialRouteProvider);
+    final authState = ref.watch(authNotifierProvider);
 
     return MaterialApp(
       title: 'Flutter Demo',
@@ -32,35 +35,28 @@ class MyApp extends ConsumerWidget {
       debugShowCheckedModeBanner: false,
       
       // Jadikan properti 'home' dinamis berdasarkan status loading data
-      home: initialRouteAsync.when(
-        data: (initialRoute) {
-          // Ambil fungsi builder dari map rute berdasarkan string rute yang didapat
-          final routeBuilder = AppRoutes.routes[initialRoute];
-          
-          if (routeBuilder != null) {
-            return routeBuilder(context);
-          }
-          
-          // Fallback jika rute tidak ditemukan di AppRoutes.routes
-          return const Scaffold(
-            body: Center(
-              child: Text('Halaman tidak ditemukan'),
-            ),
-          );
-        },
-        // Tampilan splash screen/loading saat membaca SharedPreferences
-        loading: () => const Scaffold(
+      home: _getHomeScreen(context,authState.status),
+    );
+  }
+}
+
+Widget _getHomeScreen(BuildContext context, AuthStatus status){
+  switch (status){
+    case AuthStatus.initial:
+      case AuthStatus.loading:
+        
+        return const Scaffold(
           body: Center(
             child: CircularProgressIndicator(),
           ),
-        ),
-        // Penanganan jika terjadi error
-        error: (err, stack) => const Scaffold(
-          body: Center(
-            child: Text('Terjadi kesalahan saat memuat data aplikasi'),
-          ),
-        ),
-      ),
-    );
+        );
+   case AuthStatus.authenticated:
+       return AppRoutes.routes[AppRoutes.home]!(context);
+
+    
+  case AuthStatus.unauthenticated:
+      case AuthStatus.error:
+      default:
+      return AppRoutes.routes[AppRoutes.login]!(context);
   }
 }

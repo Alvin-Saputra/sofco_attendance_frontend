@@ -6,6 +6,7 @@ import 'package:attendance_frontend/features/auth/domain/repositories/auth_repos
 import 'package:attendance_frontend/features/auth/domain/usecases/login_use_case.dart';
 import 'package:attendance_frontend/routes/app_routes.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 final authRemoteDataSourceProvider = Provider<AuthRemoteDatasources>((ref) {
   return AuthRemoteDatasources();
@@ -35,6 +36,13 @@ final initialRouteProvider = FutureProvider<String>((ref) async {
   final userId = await repository.getUserId();
 
   if (token != null && userId != null) {
+  bool isTokenExpired = JwtDecoder.isExpired(token);
+
+  if(isTokenExpired){
+    await repository.clearAuthData();
+    return AppRoutes.login;
+  }
+
     return AppRoutes.home; // Ganti dengan rute halaman utama kamu (misal: '/home')
   } else {
     return AppRoutes.login;

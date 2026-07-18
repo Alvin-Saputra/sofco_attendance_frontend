@@ -4,6 +4,7 @@ import 'package:attendance_frontend/features/auth/domain/repositories/auth_repos
 import 'package:attendance_frontend/features/auth/presentation/provider/auth_state.dart';
 import 'package:attendance_frontend/features/auth/presentation/provider/auth_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:jwt_decoder/jwt_decoder.dart';
 
 class AuthNotifier extends Notifier<AuthState> {
   late final AuthRepository _repository;
@@ -50,37 +51,35 @@ class AuthNotifier extends Notifier<AuthState> {
       final userName = await _repository.getUserName(); // Menggunakan 'N' besar
 
       if (token != null && userId != null && userName != null) {
-        state = state.copyWith(
-          status: AuthStatus.authenticated,
-          user: AuthEntity(token: token, id: userId, username: userName),
-        );
-      }
-      else{
-        state = state.copyWith(
-          status: AuthStatus.unauthenticated
-        );
+        bool isTokenExpired = JwtDecoder.isExpired(token);
+
+        if (isTokenExpired) {
+          await _repository.clearAuthData();
+          state = state.copyWith(status: AuthStatus.unauthenticated);
+        } else {
+          state = state.copyWith(
+            status: AuthStatus.authenticated,
+            user: AuthEntity(token: token, id: userId, username: userName),
+          );
+        }
+      } else {
+        state = state.copyWith(status: AuthStatus.unauthenticated);
       }
     } catch (e) {
-        state = state.copyWith(
-          status: AuthStatus.error
-        );
+      state = state.copyWith(status: AuthStatus.error);
     }
   }
 
   Future<void> logout() async {
-    try{
- await _repository.clearAuthData();
-    state =
-        state = state.copyWith(
-          status: AuthStatus.unauthenticated
-        );
-    }catch (e){
+    try {
+      await _repository.clearAuthData();
+      state = state = state.copyWith(status: AuthStatus.unauthenticated);
+    } catch (e) {
       state = state.copyWith(
         status: AuthStatus.error,
-        message: "Gagal menghapus session. Silakan coba lagi"
+        message: "Gagal menghapus session. Silakan coba lagi",
       );
     }
-   
   }
 }
 
