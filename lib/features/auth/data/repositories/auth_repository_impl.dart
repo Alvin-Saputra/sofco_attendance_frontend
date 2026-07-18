@@ -1,3 +1,4 @@
+import 'package:attendance_frontend/core/error/exception.dart';
 import 'package:attendance_frontend/core/utils/api_result.dart';
 import 'package:attendance_frontend/features/auth/data/datasources/local/auth_local_datasources.dart';
 import 'package:attendance_frontend/features/auth/data/datasources/remote/auth_remote_datasources.dart';
@@ -21,72 +22,55 @@ class AuthRepositoryImpl implements AuthRepository {
       await authLocalDatasource.saveUserId(response.authData.id);
       await authLocalDatasource.saveUserName(response.authData.username);
       return Success(response);
+    } on ServerException catch (e) {
+      if (e.statusCode == 401 || e.statusCode == 404) {
+        return Error("Username atau password tidak cocok. Coba lagi");
+      } else if (e.statusCode == 500) {
+        return Error('Server sedang bermasalah. Mohon coba lagi nanti');
+      } else {
+        return Error('Gagal melakukan login');
+      }
+    } on NetworkException {
+      return Error('Tidak ada koneksi internet. Silakan periksa jaringan anda');
+    } on TimeoutCustomException {
+      return Error('Koneksi terputus karena terlalu lama. Coba lagi');
     } catch (e) {
-      final errorMessage = e.toString().replaceAll('Exception', '');
-      return Error(errorMessage);
+      return Error('Terjadi kesalahan tidak terduga');
     }
   }
 
   @override
   Future<String?> getToken() async {
-    try {
-      return await authLocalDatasource.getToken();
-    } catch (e) {
-      rethrow;
-    }
+    return await authLocalDatasource.getToken();
   }
 
   @override
   Future<int?> getUserId() async {
-    try {
-      return await authLocalDatasource.getUserId();
-    } catch (e) {
-      rethrow;
-    }
+    return await authLocalDatasource.getUserId();
   }
 
   @override
   Future<void> saveToken(String token) async {
-    try {
-      await authLocalDatasource.saveToken(token);
-    } catch (e) {
-      rethrow;
-    }
+    await authLocalDatasource.saveToken(token);
   }
 
   @override
   Future<void> saveUserId(int userId) async {
-    try {
-      await authLocalDatasource.saveUserId(userId);
-    } catch (e) {
-      rethrow;
-    }
+    await authLocalDatasource.saveUserId(userId);
   }
 
   @override
   Future<void> clearAuthData() async {
-    try {
-      await authLocalDatasource.clearAuthData();
-    } catch (e) {
-      rethrow;
-    }
+    await authLocalDatasource.clearAuthData();
   }
 
   @override
   Future<String?> getUserName() async {
-    try {
-      return await authLocalDatasource.getUserName();
-    } catch (e) {
-      rethrow;
-    }
+    return await authLocalDatasource.getUserName();
   }
 
   @override
   Future<void> saveUsername(String userName) async {
-    try {
-      await authLocalDatasource.saveUserName(userName);
-    } catch (e) {
-      rethrow;
-    }
+    await authLocalDatasource.saveUserName(userName);
   }
 }

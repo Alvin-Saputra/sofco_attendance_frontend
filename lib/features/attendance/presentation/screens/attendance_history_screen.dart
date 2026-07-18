@@ -74,7 +74,8 @@ class _AttendanceHistoryScreenState
 
       case ResultState.error:
         return Center(
-          child: Column(
+          child: Column( mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(attendanceState.message),
               SizedBox(height: 16),

@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:attendance_frontend/core/error/exception.dart';
 import 'package:attendance_frontend/core/utils/api_result.dart';
 import 'package:attendance_frontend/features/attendance/data/datasources/attendance_datasources.dart';
 import 'package:attendance_frontend/features/attendance/data/models/create_attendance_response.dart';
@@ -23,9 +24,21 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
         token,
       );
       return Success(response);
-    } catch (e) {
-      final errorMessage = e.toString().replaceAll('Exception', '');
-      return Error(errorMessage);
+    } on ServerException catch (e){
+      if(e.statusCode == 401){
+        return Error ("Session anda telah berakhir. Silahkan Login Kembali");
+      }
+      else if (e.statusCode == 500){
+        return Error('Server sedang bermasalah. Mohon coba lagi nanti');
+      }
+      return Error('Gagal mengambil data absensi');
+    } on NetworkException{
+      return Error('Tidak ada koneksi internet. Silakan periksa jaringan anda');
+    } on TimeoutCustomException{
+      return Error('Koneksi terputus karena terlalu lama. Coba lagi');
+    }
+    catch (e) {
+      return Error('Terjadi kesalahan tidak terduga');
     }
   }
 
@@ -49,9 +62,21 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
         image: image,
       );
       return Success(response);
-    } catch (e) {
-      final errorMessage = e.toString().replaceAll('Exception', '');
-      return Error(errorMessage);
+    } on ServerException catch (e){
+      if(e.statusCode == 401){
+        return Error ("Session anda telah berakhir. Silahkan Login Kembali");
+      }
+      else if (e.statusCode == 500){
+        return Error('Server sedang bermasalah. Mohon coba lagi nanti');
+      }
+      return Error('Gagal menyimpan data absensi');
+    } on NetworkException{
+      return Error('Tidak ada koneksi internet. Silakan periksa jaringan anda');
+    } on TimeoutCustomException{
+      return Error('Koneksi terputus karena terlalu lama. Coba lagi');
+    }
+    catch (e) {
+      return Error('Terjadi kesalahan tidak terduga');
     }
   }
 }

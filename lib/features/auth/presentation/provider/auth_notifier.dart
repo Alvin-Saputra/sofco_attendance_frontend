@@ -68,11 +68,19 @@ class AuthNotifier extends Notifier<AuthState> {
   }
 
   Future<void> logout() async {
-    await _repository.clearAuthData();
+    try{
+ await _repository.clearAuthData();
     state =
         state = state.copyWith(
           status: AuthStatus.unauthenticated
         );
+    }catch (e){
+      state = state.copyWith(
+        status: AuthStatus.error,
+        message: "Gagal menghapus session. Silakan coba lagi"
+      );
+    }
+   
   }
 }
 
