@@ -1,4 +1,4 @@
-# Attendance Frontend
+# Sofco Attendance Frontend
 
 Aplikasi frontend (mobile) berbasis Flutter untuk sistem presensi (Attendance). Aplikasi ini dibangun dengan mengimplementasikan State Management Riverpod dan integrasi REST API menggunakan HTTP.
 
