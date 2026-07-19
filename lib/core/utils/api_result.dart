@@ -7,5 +7,6 @@ sealed class ApiResult<T>{}
 
   class Error<T>extends ApiResult<T>{
     final String message;
-    Error(this.message);
+    final int? statusCode;
+    Error(this.message, {this.statusCode});
   }

@@ -1,4 +1,5 @@
 import 'package:attendance_frontend/features/attendance/presentation/providers/result_state.dart';
+import 'package:attendance_frontend/features/auth/presentation/provider/auth_notifier.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:attendance_frontend/core/utils/api_result.dart';
 import 'package:attendance_frontend/features/attendance/domain/usecases/fetch_attendance_use_case.dart';
@@ -37,6 +38,9 @@ class FetchAttendanceNotifier extends Notifier<FetchAttendanceState> {
           );
         }
       case Error():
+      if (result.statusCode == 401) {
+          ref.read(authNotifierProvider.notifier).logout();
+        }
         state = state.copyWith(
           state: ResultState.error,
           message: result.message,

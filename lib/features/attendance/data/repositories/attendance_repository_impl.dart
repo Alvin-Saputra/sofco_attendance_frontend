@@ -19,7 +19,7 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
       final token = await authLocalDatasource.getToken();
       final userId = await authLocalDatasource.getUserId();
       if (token == null || userId == null)
-        return Error('Token or userId is null');
+        return Error('Session anda telah berakhir. Silahkan Login Kembali');
       final response = await attendanceDatasource.fetchAttendance(
         userId,
         token,
@@ -27,7 +27,7 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
       return Success(response);
     } on ServerException catch (e){
       if(e.statusCode == 401){
-        return Error ("Session anda telah berakhir. Silahkan Login Kembali");
+       return Error ("Session anda telah berakhir. Silahkan Login Kembali", statusCode: 401);
       }
       else if (e.statusCode == 500){
         return Error('Server sedang bermasalah. Mohon coba lagi nanti');
@@ -53,7 +53,7 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
       final token = await authLocalDatasource.getToken();
       final userId = await authLocalDatasource.getUserId();
       if (token == null || userId == null)
-        return Error('Token or userId is null');
+        return Error('Session anda telah berakhir. Silahkan Login Kembali');
         
       final response = await attendanceDatasource.createAttendance(
         userId: userId,
@@ -65,7 +65,7 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
       return Success(response);
     } on ServerException catch (e){
       if(e.statusCode == 401){
-        return Error ("Session anda telah berakhir. Silahkan Login Kembali");
+        return Error ("Session anda telah berakhir. Silahkan Login Kembali", statusCode: 401);
       }
       else if (e.statusCode == 500){
         return Error('Server sedang bermasalah. Mohon coba lagi nanti');
@@ -87,7 +87,7 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
       final token = await authLocalDatasource.getToken();
       final userId = await authLocalDatasource.getUserId();
       if (token == null || userId == null)
-        return Error('Token or userId is null');
+        return Error('Session anda telah berakhir. Silahkan Login Kembali');
       final response = await attendanceDatasource.checkAttendance(
         userId,
         token,
@@ -96,7 +96,7 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
       return Success(response);
     } on ServerException catch (e){
       if(e.statusCode == 401){
-        return Error ("Session anda telah berakhir. Silahkan Login Kembali");
+        return Error ("Session anda telah berakhir. Silahkan Login Kembali", statusCode: 401);
       }
       else if (e.statusCode == 500){
         return Error('Server sedang bermasalah. Mohon coba lagi nanti');

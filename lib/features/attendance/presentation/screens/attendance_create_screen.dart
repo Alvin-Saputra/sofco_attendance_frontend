@@ -1,6 +1,8 @@
 import 'dart:io';
 
-import 'package:attendance_frontend/core/components/button.dart';
+import 'package:attendance_frontend/core/components/custom_button.dart';
+import 'package:attendance_frontend/core/constant/app_colors.dart';
+import 'package:attendance_frontend/core/constant/app_text_size.dart';
 import 'package:attendance_frontend/core/utils/camera_utils.dart';
 import 'package:attendance_frontend/core/utils/date_parser.dart';
 import 'package:attendance_frontend/core/utils/time_parser.dart';
@@ -54,7 +56,7 @@ class _AttendanceRecordScreenState
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(next.message),
-            backgroundColor: Colors.red.shade600,
+            backgroundColor: AppColors.danger,
             behavior: SnackBarBehavior.floating,
           ),
         );
@@ -64,7 +66,7 @@ class _AttendanceRecordScreenState
     });
 
     return Scaffold(
-      appBar: AppBar(title: const Text("Attendance Record")),
+      appBar: AppBar(title: const Text("Attendance Record", style: TextStyle(color: AppColors.tertiary))),
       body: Column(
         children: [
           InkWell(
@@ -92,7 +94,7 @@ class _AttendanceRecordScreenState
                 child: (_selectedImage == null)
                     ? Text(
                         "+ Tap to Take Photo",
-                        style: TextStyle(fontSize: 16, color: Colors.grey),
+                        style: TextStyle(fontSize: AppTextSize.textBase, color:AppColors.tertiary),
                       )
                     : null,
               ),
@@ -101,17 +103,24 @@ class _AttendanceRecordScreenState
 
           SizedBox(height: 48),
           Center(
-            child: (isLoading)
-                ? CircularProgressIndicator()
-                : Container(
-                    width: 200,
-                    child: Button(
-                      onPressed: () async {
-                        await _createAttendance();
-                      },
-                      text: 'Submit',
-                    ),
-                  ),
+            child: Container(
+              width: 200,
+              child: CustomButton(
+                onPressed: () async {
+                  await _createAttendance();
+                },
+                isDisable: isLoading,
+                childWidget: (isLoading)
+                    ? CircularProgressIndicator()
+                    : Text(
+                        "Submit",
+                        style: TextStyle(
+                          fontSize: AppTextSize.textLg,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+              ),
+            ),
           ),
         ],
       ),

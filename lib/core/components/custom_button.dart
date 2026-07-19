@@ -1,19 +1,21 @@
+import 'package:attendance_frontend/core/constant/app_colors.dart';
+import 'package:attendance_frontend/core/constant/app_text_size.dart';
 import 'package:flutter/material.dart';
 
-class Button extends StatelessWidget {
-  const Button({super.key, required this.onPressed, required this.text, this.isDisable = false});
+class CustomButton extends StatelessWidget {
+  const CustomButton({super.key, required this.onPressed, this.isDisable = false, required this.childWidget});
 
-  final Function() onPressed;
-  final String text;
+  final Function()? onPressed;
   final bool isDisable;
+  final Widget childWidget;
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: (isDisable)?null:onPressed,
       style: ElevatedButton.styleFrom(
-        backgroundColor: (isDisable)?Colors.grey:Colors.blue,
-        foregroundColor: Colors.white,
+        backgroundColor: (isDisable)?Colors.grey:AppColors.secondary,
+        foregroundColor: AppColors.primary,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(
             8.0,
@@ -23,10 +25,7 @@ class Button extends StatelessWidget {
       child: Center(
         child: Padding(
           padding: const EdgeInsets.all(12.0),
-          child: Text(
-            text,
-            style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
-          ),
+          child: childWidget
         ),
       ),
     );

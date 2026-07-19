@@ -1,4 +1,5 @@
 
+import 'package:attendance_frontend/core/constant/app_text_size.dart';
 import 'package:flutter/material.dart';
 
 class CustomInputField extends StatelessWidget {
@@ -42,7 +43,7 @@ class CustomInputField extends StatelessWidget {
         Text(
           label,
           style: TextStyle(
-            fontSize:16, fontWeight: FontWeight.w600,
+            fontSize:AppTextSize.textBase, fontWeight: FontWeight.w600,
             color: Color.fromARGB(255, 39, 39, 39),
           )
         ),

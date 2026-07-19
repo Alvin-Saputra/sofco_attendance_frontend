@@ -1,6 +1,8 @@
 import 'package:attendance_frontend/core/components/attendance_card.dart';
+import 'package:attendance_frontend/core/constant/app_text_size.dart';
 import 'package:attendance_frontend/core/utils/date_parser.dart';
 import 'package:attendance_frontend/core/utils/time_parser.dart';
+import 'package:attendance_frontend/features/attendance/presentation/providers/check_attendance_notifier.dart';
 import 'package:attendance_frontend/features/attendance/presentation/providers/fetch_attendance_notifier.dart';
 import 'package:attendance_frontend/features/attendance/presentation/providers/fetch_attendance_state.dart';
 import 'package:attendance_frontend/features/attendance/presentation/providers/result_state.dart';
@@ -24,7 +26,14 @@ class _AttendanceHistoryScreenState
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
+      String _current = DateParser.dateToString(
+        DateTime.now(),
+        pattern: "yyyy-MM-dd",
+      );
       ref.read(fetchAttendanceNotifierProvider.notifier).fetchAttendance();
+      ref
+          .read(checkAttendanceNotifierProvider.notifier)
+          .checkAttendance(_current);
     });
   }
 
@@ -70,14 +79,37 @@ class _AttendanceHistoryScreenState
         );
 
       case ResultState.empty:
-        return Center(child: Text("No Attendance Data"));
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                "No Attendance Data",
+                style: TextStyle(
+                  fontSize: AppTextSize.textLg,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        );
 
       case ResultState.error:
         return Center(
-          child: Column( mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Text(attendanceState.message),
+              Text(
+                attendanceState.message,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: AppTextSize.textLg,
+                  fontWeight: FontWeight.bold,
+                  
+                ),
+              ),
               SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () {
@@ -93,7 +125,21 @@ class _AttendanceHistoryScreenState
 
       case ResultState.initial:
       default:
-        return Center(child: Text("No Attendance Data"));
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                "No Attendance Data",
+                style: TextStyle(
+                  fontSize: AppTextSize.textLg,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        );
     }
   }
 }

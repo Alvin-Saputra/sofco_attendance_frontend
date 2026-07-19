@@ -1,5 +1,6 @@
-import 'package:attendance_frontend/core/components/button.dart';
+import 'package:attendance_frontend/core/components/custom_button.dart';
 import 'package:attendance_frontend/core/components/custom_input_field.dart';
+import 'package:attendance_frontend/core/constant/app_colors.dart';
 import 'package:attendance_frontend/features/auth/presentation/provider/auth_notifier.dart';
 import 'package:attendance_frontend/features/auth/presentation/provider/auth_state.dart';
 import 'package:attendance_frontend/routes/app_routes.dart';
@@ -41,13 +42,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // Memantau perubahan state untuk UI (reactive)
+    
     final authState = ref.watch(authNotifierProvider);
     final isLoading = authState.status == AuthStatus.loading;
 
-    // ------------------------------------------------------------------
-    // REF.LISTEN: Menangani navigasi dan notifikasi error (Side Effects)
-    // ------------------------------------------------------------------
     ref.listen<AuthState>(authNotifierProvider, (previous, next) {
       if (next.status == AuthStatus.error) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -57,10 +55,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             behavior: SnackBarBehavior.floating,
           ),
         );
-      } else if (next.status == AuthStatus.authenticated) {
-        // Navigasi ke halaman utama (ganti '/home' sesuai route Anda)
-        // Gunakan pushReplacementNamed atau GoRouter agar user tidak bisa back ke login
-        Navigator.of(context).pushReplacementNamed(AppRoutes.home);
       }
     });
 
@@ -70,22 +64,28 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              // Container(
-              //   margin: const EdgeInsets.only(top: 64.0),
-              //   child: Row(
-              //     mainAxisAlignment: MainAxisAlignment.center,
-              //     children: [
-              //       Container(
-              //         height: 50,
-              //         width: 50,
-              //         decoration: BoxDecoration(
-                       
-              //           borderRadius: BorderRadius.circular(8.0),
-              //         ),
-              //       ),
-              //     ],
-              //   ),
-              // ),
+            Container(
+  margin: const EdgeInsets.only(top: 64.0),
+  child: Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      Container(
+        height: 60,
+        width: 60,
+        decoration: BoxDecoration(
+          color: Colors.blue.shade100, 
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+
+        child: const Icon(
+          Icons.check_circle_outline,          
+          color: AppColors.secondary, 
+          size: 80,           
+        ),
+      ),
+    ],
+  ),
+),
               Container(
                 margin: const EdgeInsets.only(top: 64.0, left: 32.0),
                 child: const Row(
@@ -140,16 +140,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       SizedBox(
                         width: double.infinity,
                         height: 50,
-                        child: ElevatedButton(
+                        child: CustomButton(
                           // Nonaktifkan tombol (null) saat proses loading berlangsung
                           onPressed: isLoading ? null : _login,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Theme.of(context).primaryColor,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                          ),
-                          child: isLoading
+                          isDisable: isLoading,
+                          childWidget: isLoading
                               ? const SizedBox(
                                   height: 24,
                                   width: 24,

@@ -7,6 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
+
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -24,39 +27,27 @@ class MyApp extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+
+    ref.listen<AuthState>(authNotifierProvider, (previous, next) {
+      if (next.status == AuthStatus.unauthenticated) {
+        navigatorKey.currentState?.pushNamedAndRemoveUntil(AppRoutes.login, (route) => false);
+      } 
+      else if (next.status == AuthStatus.authenticated && previous?.status != AuthStatus.authenticated) {
+        navigatorKey.currentState?.pushNamedAndRemoveUntil(AppRoutes.home, (route) => false);
+      }
+    });
     
-    // final initialRouteAsync = ref.watch(initialRouteProvider);
-    final authState = ref.watch(authNotifierProvider);
+    // // final initialRouteAsync = ref.watch(initialRouteProvider);
+    // final authState = ref.watch(authNotifierProvider);
 
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple)),
+      theme: ThemeData(colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue)),
       routes: AppRoutes.routes, // Daftarkan rute aplikasi kamu di sini
       debugShowCheckedModeBanner: false,
-      
-      // Jadikan properti 'home' dinamis berdasarkan status loading data
-      home: _getHomeScreen(context,authState.status),
+      navigatorKey: navigatorKey, 
+      home: Scaffold(body: Center(child: LinearProgressIndicator(),))
     );
   }
 }
 
-Widget _getHomeScreen(BuildContext context, AuthStatus status){
-  switch (status){
-    case AuthStatus.initial:
-      case AuthStatus.loading:
-        
-        return const Scaffold(
-          body: Center(
-            child: CircularProgressIndicator(),
-          ),
-        );
-   case AuthStatus.authenticated:
-       return AppRoutes.routes[AppRoutes.home]!(context);
-
-    
-  case AuthStatus.unauthenticated:
-      case AuthStatus.error:
-      default:
-      return AppRoutes.routes[AppRoutes.login]!(context);
-  }
-}

@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:attendance_frontend/core/components/attendance_card.dart';
-import 'package:attendance_frontend/core/components/button.dart';
+import 'package:attendance_frontend/core/components/custom_button.dart';
+import 'package:attendance_frontend/core/constant/app_colors.dart';
+import 'package:attendance_frontend/core/constant/app_text_size.dart';
 import 'package:attendance_frontend/core/utils/date_parser.dart';
 import 'package:attendance_frontend/core/utils/time_parser.dart';
 import 'package:attendance_frontend/features/attendance/presentation/providers/attendance_provider.dart';
@@ -26,7 +28,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   DateTime _currentTime = DateTime.now();
 
   @override
- void initState() {
+  void initState() {
     super.initState();
 
     // 1. Panggil API/State cukup SATU KALI saat halaman diinisialisasi
@@ -67,14 +69,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           children: [
             const Text(
               "Hello",
-              style: TextStyle(fontSize: 14, color: Colors.grey),
+              style: TextStyle(
+                fontSize: AppTextSize.textSm,
+                color: AppColors.quarternary,
+              ),
             ),
 
             Text(
               "${authState.user?.username}",
               style: const TextStyle(
-                fontSize: 18,
-                color: Colors.black87,
+                fontSize: AppTextSize.textXl,
+                color: AppColors.tertiary,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -82,7 +87,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         ),
         actions: [
           IconButton(
-            icon: const Icon(Icons.logout_rounded, color: Colors.redAccent),
+            icon: const Icon(Icons.logout_rounded, color: AppColors.danger),
             tooltip: 'Logout',
             onPressed: () async {
               final confirmLogout = await showDialog<bool>(
@@ -134,8 +139,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   Text(
                     "${DateParser.dateToString(_currentTime, pattern: 'HH:mm:ss')}",
                     style: const TextStyle(
-                      color: Colors.black87,
-                      fontSize: 40,
+                      color: AppColors.tertiary,
+                      fontSize: AppTextSize.heading,
                       fontWeight: FontWeight.bold,
                       letterSpacing: 1,
                     ),
@@ -143,8 +148,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   Text(
                     "${DateParser.dateToString(DateTime.now(), pattern: 'EEEE, dd MMMM yyyy')}",
                     style: TextStyle(
-                      color: Colors.grey[600],
-                      fontSize: 14,
+                      color: AppColors.quarternary,
+                      fontSize: AppTextSize.textSm,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -170,7 +175,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         children: [
                           Text(
                             'Status Hari Ini',
-                            style: TextStyle(color: Colors.grey, fontSize: 14),
+                            style: TextStyle(
+                              color: AppColors.quarternary,
+                              fontSize: AppTextSize.textSm,
+                            ),
                           ),
                           const SizedBox(height: 4),
 
@@ -184,8 +192,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                     ? 'Sudah Absen Masuk'
                                     : 'Belum Absen Masuk',
                                 style: const TextStyle(
-                                  color: Colors.black87,
-                                  fontSize: 18,
+                                  color: AppColors.tertiary,
+                                  fontSize: AppTextSize.textXl,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -193,8 +201,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               ResultState.empty => const Text(
                                 'Data Tidak Ditemukan',
                                 style: TextStyle(
-                                  color: Colors.grey,
-                                  fontSize: 18,
+                                  color: AppColors.tertiary,
+                                  fontSize: AppTextSize.textXl,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
@@ -202,8 +210,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               ResultState.error => Text(
                                 'Gagal memuat status: ${checkAttendanceState.message}',
                                 style: const TextStyle(
-                                  color: Colors.redAccent,
-                                  fontSize: 14,
+                                  color: AppColors.danger,
+                                  fontSize: AppTextSize.textXl,
                                 ),
                                 textAlign: TextAlign.center,
                               ),
@@ -211,15 +219,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                           ),
 
                           SizedBox(height: 24.0),
-                          Button(
+                          CustomButton(
                             onPressed: () {
                               Navigator.pushNamed(
                                 context,
                                 AppRoutes.attendanceRecord,
                               );
                             },
-                            text: "Absen Sekarang",
-                            isDisable: true,
+
+                            isDisable: checkAttendanceState.isAttended ?? true,
+                            childWidget: Text(
+                              "Absen Sekarang",
+                              style: TextStyle(
+                                fontSize: AppTextSize.textLg,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
                           ),
                         ],
                       ),
@@ -236,8 +251,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   const Text(
                     'Aktivitas Terakhir',
                     style: TextStyle(
-                      color: Colors.black87,
-                      fontSize: 16,
+                      color: AppColors.tertiary,
+                      fontSize: AppTextSize.textBase,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -247,7 +262,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     },
                     child: Text(
                       'Lihat Semua',
-                      style: TextStyle(color: Colors.blueAccent, fontSize: 13),
+                      style: TextStyle(
+                        color: AppColors.secondary,
+                        fontSize: AppTextSize.textXs,
+                      ),
                     ),
                   ),
                 ],
@@ -287,21 +305,45 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   },
                 ),
 
-                ResultState.empty => Center(child: Text("No Attendance Data")),
-
-                ResultState.error => Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(attendanceState.message),
-                      SizedBox(height: 16),
-                    ],
+                ResultState.empty => SizedBox(
+                  height: 200,
+                  child: Center(
+                    child: Text(
+                      "No Attendance Data",
+                      style: TextStyle(
+                        fontSize: AppTextSize.textLg,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                 ),
 
-                ResultState.initial => Center(
-                  child: Text("No Attendance Data"),
+                ResultState.error => SizedBox(
+                  height:200,
+                  child: Center(
+                    child: Text(
+                      attendanceState.message,
+                      style: TextStyle(
+                        fontSize: AppTextSize.textLg,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+
+                ResultState.initial => SizedBox(
+                  height: 200,
+                  child: Center(
+                    child: Center(
+                      child: Text(
+                        "No Attendance Data",
+                        style: TextStyle(
+                          fontSize: AppTextSize.textLg,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
                 ),
               },
             ],

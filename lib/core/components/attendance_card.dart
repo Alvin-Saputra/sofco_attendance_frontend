@@ -1,3 +1,4 @@
+import 'package:attendance_frontend/core/constant/app_text_size.dart';
 import 'package:flutter/material.dart';
 
 class AttendanceCard extends StatelessWidget {
@@ -18,9 +19,11 @@ class AttendanceCard extends StatelessWidget {
           leading: CircleAvatar(child: Icon(Icons.check_circle, color: Colors.blueAccent ,)),
           title: Text(
             title,
+            style: const TextStyle(fontSize: AppTextSize.textLg, fontWeight: FontWeight.bold)
           ),
           subtitle: Text(
             "Time: $subtitle",
+             style: const TextStyle(fontSize: AppTextSize.textSm, fontWeight: FontWeight.w300)
           ),
         ),
       ),
