@@ -17,11 +17,10 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
   Future<ApiResult<FetchAttendanceResponse>> fetchAttendance() async {
     try {
       final token = await authLocalDatasource.getToken();
-      final userId = await authLocalDatasource.getUserId();
-      if (token == null || userId == null)
+  
+      if (token == null)
         return Error('Session anda telah berakhir. Silahkan Login Kembali');
       final response = await attendanceDatasource.fetchAttendance(
-        userId,
         token,
       );
       return Success(response);
@@ -51,12 +50,10 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
   }) async {
     try {
       final token = await authLocalDatasource.getToken();
-      final userId = await authLocalDatasource.getUserId();
-      if (token == null || userId == null)
+      if (token == null)
         return Error('Session anda telah berakhir. Silahkan Login Kembali');
         
       final response = await attendanceDatasource.createAttendance(
-        userId: userId,
         token: token,
         date: date,
         time: time,
@@ -85,11 +82,9 @@ class AttendanceRepositoryImpl implements AttendanceRepository {
   Future<ApiResult<CheckAttendanceResponse>> checkAttendance(String date) async {
    try {
       final token = await authLocalDatasource.getToken();
-      final userId = await authLocalDatasource.getUserId();
-      if (token == null || userId == null)
+      if (token == null)
         return Error('Session anda telah berakhir. Silahkan Login Kembali');
       final response = await attendanceDatasource.checkAttendance(
-        userId,
         token,
         date
       );

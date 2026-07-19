@@ -12,10 +12,10 @@ class AttendanceDatasources {
   static const String _baseUrl = 'http://10.0.2.2:3000';
 
   Future<FetchAttendanceResponse> fetchAttendance(
-    int userId,
+
     String token,
   ) async {
-    final url = Uri.parse('$_baseUrl/attendance?userId=$userId');
+    final url = Uri.parse('$_baseUrl/attendance');
 
     try {
       final response = await http.get(
@@ -43,11 +43,11 @@ class AttendanceDatasources {
     }
   }
   Future<CheckAttendanceResponse> checkAttendance(
-    int userId,
+
     String token,
     String date
   ) async {
-    final url = Uri.parse('$_baseUrl/attendance/check?userId=$userId&date=$date');
+    final url = Uri.parse('$_baseUrl/attendance/check?date=$date');
 
     try {
       final response = await http.get(
@@ -76,7 +76,7 @@ class AttendanceDatasources {
   }
 
   Future<CreateAttendanceResponse> createAttendance({
-    required int userId,
+
     required String token,
     required String date,
     required String time,
@@ -91,7 +91,7 @@ class AttendanceDatasources {
     });
 
     try {
-      request.fields['userId'] = userId.toString();
+      // request.fields['userId'] = userId.toString();
       request.fields['date'] = date;
       request.fields['time'] = time;
 
