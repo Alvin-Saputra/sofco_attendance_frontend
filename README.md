@@ -9,6 +9,12 @@ Aplikasi frontend (mobile) berbasis Flutter untuk sistem presensi (Attendance). 
 - Riwayat Presensi
 - Environment Configuration (membaca Base URL) menggunakan `.env`
 
+## 🛠 Prasyarat (Prerequisites)
+Sebelum menjalankan project ini, pastikan Anda telah menginstal beberapa perangkat lunak berikut di sistem Anda:
+- [Flutter SDK](https://docs.flutter.dev/get-started/install) (versi `dart: ">=3.11.1 <4.0.0" dan flutter: ">=3.38.0"` atau direkomendasikan versi stabil terbaru)
+- Editor pilihan Anda (misalnya: [Android Studio](https://developer.android.com/studio), [Visual Studio Code](https://code.visualstudio.com/), atau IntelliJ IDEA)
+- Emulator Android / Simulator iOS, atau perangkat HP fisik yang terhubung (USB Debugging diaktifkan)
+
 ## 📥 Panduan Instalasi (Cloning & Setup)
 
 1. **Clone repositori**  
