@@ -8,6 +8,7 @@ class CameraUtils {
   static Future<File?> pickImageFromCamera() async {
     final XFile? pickedFile = await _picker.pickImage(
       source: ImageSource.camera,
+      preferredCameraDevice: CameraDevice.front,
       imageQuality: 80,
     );
 

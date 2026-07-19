@@ -4,9 +4,10 @@ import 'dart:io';
 import 'package:attendance_frontend/core/error/exception.dart';
 import 'package:attendance_frontend/features/auth/data/models/login_response.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AuthRemoteDatasources {
-  static const String _baseUrl = 'http://10.0.2.2:3000';
+  static final String _baseUrl = dotenv.env['BASE_URL'] ?? 'http://10.0.2.2:3000';
 
   Future<LoginResponse> login(String username, String password) async {
     final url = Uri.parse('$_baseUrl/login');

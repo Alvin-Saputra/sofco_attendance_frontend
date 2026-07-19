@@ -7,9 +7,10 @@ import 'package:attendance_frontend/features/attendance/data/models/check_attend
 import 'package:attendance_frontend/features/attendance/data/models/create_attendance_response.dart';
 import 'package:attendance_frontend/features/attendance/data/models/fetch_attendance_response.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class AttendanceDatasources {
-  static const String _baseUrl = 'http://10.0.2.2:3000';
+  static final String _baseUrl = dotenv.env['BASE_URL'] ?? 'http://10.0.2.2:3000';
 
   Future<FetchAttendanceResponse> fetchAttendance(
 
